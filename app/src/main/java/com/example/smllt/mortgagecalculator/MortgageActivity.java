@@ -108,7 +108,7 @@ public class MortgageActivity extends AppCompatActivity {
         Double p = principle;
         Double m = monthlyPayment;
         Integer n = numPayments;
-        Double interest = p - (m*n);
+        Double interest =  (m*n) - p;
         return interest;
     }
 
