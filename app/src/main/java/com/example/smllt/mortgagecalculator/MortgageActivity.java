@@ -93,9 +93,23 @@ public class MortgageActivity extends AppCompatActivity {
         //String.format("%.2f", monthlyPayment);
         output.setVisibility(View.VISIBLE);
 
+        //format the monthly payment to a str and display it
         String monthlyPaymentToStr = monthlyPayment.toString();
         monthlyPaymentAmount.setText(monthlyPaymentToStr);
+        //find the total interest paid and set it to a string. Set the TextView as astr
+        String totIntPaidStr = interestPaid(monthlyPayment, numPayments, principle).toString();
+        totalInterestPaid.setText(totIntPaidStr);
 
+
+    }
+
+    //doing a func to find total interest paid to keep calculate() clean
+    Double interestPaid(Double monthlyPayment, Integer numPayments, Double principle){
+        Double p = principle;
+        Double m = monthlyPayment;
+        Integer n = numPayments;
+        Double interest = p - (m*n);
+        return interest;
     }
 
     /**
