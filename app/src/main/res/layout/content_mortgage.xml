@@ -86,6 +86,11 @@
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
             android:id="@+id/propertyTaxRate"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/alertMessage">
+        </TextView>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -98,7 +103,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
                 android:id="@+id/monthlyPaymentAmount"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -107,7 +111,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
                 android:id="@+id/totalInterestPaid"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -116,7 +119,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
                 android:id="@+id/totalPropertyTaxPaid"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -125,7 +127,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
                 android:id="@+id/payOffDate"/>
         </LinearLayout>
 
