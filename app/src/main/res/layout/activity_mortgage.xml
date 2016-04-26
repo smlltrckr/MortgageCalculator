@@ -1,36 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="com.example.smllt.mortgagecalculator.MortgageActivity">
 
-    <!--<android.support.design.widget.AppBarLayout-->
-        <!--android:id="@+id/app_bar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:fitsSystemWindows="true"-->
-        <!--android:theme="@style/AppTheme.AppBarOverlay"-->
-        <!--android:paddingTop="20dp"-->
-        <!--app:popupTheme="@style/AppTheme.PopupOverlay" >-->
-
-
-        <!--&lt;!&ndash;<android.support.design.widget.CollapsingToolbarLayout&ndash;&gt;-->
-            <!--&lt;!&ndash;android:id="@+id/toolbar_layout"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:fitsSystemWindows="true"&ndash;&gt;-->
-            <!--&lt;!&ndash;app:contentScrim="?attr/colorPrimary"&ndash;&gt;-->
-            <!--&lt;!&ndash;app:layout_scrollFlags="scroll|exitUntilCollapsed">&ndash;&gt;-->
-
-            <!--&lt;!&ndash;<android.support.v7.widget.Toolbar&ndash;&gt;-->
-                <!--&lt;!&ndash;android:id="@+id/toolbar"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_height="?attr/actionBarSize"&ndash;&gt;-->
-                <!--&lt;!&ndash;app:layout_collapseMode="pin"&ndash;&gt;-->
-                <!--&lt;!&ndash;app:popupTheme="@style/AppTheme.PopupOverlay" >&ndash;&gt;-->
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -54,20 +30,6 @@
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>
 
-            <!--&lt;!&ndash;</android.support.v7.widget.Toolbar>&ndash;&gt;-->
-
-        <!--&lt;!&ndash;</android.support.design.widget.CollapsingToolbarLayout>&ndash;&gt;-->
-    <!--</android.support.design.widget.AppBarLayout>-->
-
     <include layout="@layout/content_mortgage" />
-
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/fab"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--android:src="@android:drawable/ic_dialog_email"-->
-        <!--app:layout_anchor="@id/app_bar"-->
-        <!--app:layout_anchorGravity="bottom|end" />-->
 
 </android.support.design.widget.CoordinatorLayout>
