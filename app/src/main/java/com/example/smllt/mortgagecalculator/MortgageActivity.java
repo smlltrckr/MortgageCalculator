@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.Date;
+
 public class MortgageActivity extends AppCompatActivity {
     private Button calculateBtn, resetBtn;
     private EditText homeValue,downPayment,interestRate,propertyTaxRate;
@@ -71,6 +73,7 @@ public class MortgageActivity extends AppCompatActivity {
      */
     private void calculate() {
         //TODO:
+        Date d;
         Double monthlyInterest;
         Double principle;
         Integer numPayments;
@@ -103,8 +106,10 @@ public class MortgageActivity extends AppCompatActivity {
         }else{
             propertyTaxPercent = Double.parseDouble(propertyTaxRate.getText().toString()) / 100 ;
         }
-
+        //this is the monthly payment without the property tax
         monthlyPayment = principle * ( (monthlyInterest * Math.pow(monthlyInterest + 1 , numPayments)) / (Math.pow(monthlyInterest + 1, numPayments)-1));
+        monthlyPayment = monthlyPayment + ( propertyInterestPaid(years, propertyTaxPercent, Double.parseDouble(homeValue.getText().toString())) / numPayments);
+
         //I am not sure how to use this formatter.
         //String.format("%.2f", monthlyPayment);
         output.setVisibility(View.VISIBLE);
@@ -113,10 +118,12 @@ public class MortgageActivity extends AppCompatActivity {
         String monthlyPaymentToStr = monthlyPayment.toString();
         monthlyPaymentAmount.setText(monthlyPaymentToStr);
         //find the total interest paid and set it to a string. Set the TextView as a str
+        //NEED THIS to reset monthly payment to not have property tax
+        monthlyPayment = principle * ( (monthlyInterest * Math.pow(monthlyInterest + 1 , numPayments)) / (Math.pow(monthlyInterest + 1, numPayments)-1));
         String totIntPaidStr = interestPaid(monthlyPayment, numPayments, principle).toString();
         totalInterestPaid.setText(totIntPaidStr);
         //find the total property tax paid and set to a string then place in the TextView to show result.
-        String totPropTaxPaid = propertyInterestPaid(years, propertyTaxPercent, principle).toString();
+        String totPropTaxPaid = propertyInterestPaid(years, propertyTaxPercent, Double.parseDouble(homeValue.getText().toString())).toString();
         totalPropertyTaxPaid.setText(totPropTaxPaid);
 
 
