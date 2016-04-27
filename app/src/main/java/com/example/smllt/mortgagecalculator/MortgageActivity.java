@@ -53,7 +53,10 @@ public class MortgageActivity extends AppCompatActivity {
             }
         });
     }
-    //instantiate the hidden part of the results
+
+    /**
+     * This instantiates the initially hidden output fields
+     */
     private void instantiateHiddenTexts() {
         monthlyPaymentAmount = (TextView) findViewById(R.id.monthlyPaymentAmount);
         totalInterestPaid = (TextView) findViewById(R.id.totalInterestPaid);
@@ -62,13 +65,17 @@ public class MortgageActivity extends AppCompatActivity {
     }
 
     /**
-     * Does all the calculations when finished sets Output LinearLayout to Visible
+     * This computes the initial monthly payments.
+     * It also brings in other functions to fill in the rest of the output fields.
+     * It makes the output visible to the user.
      */
     private void calculate() {
         //TODO:
         Double monthlyInterest;
         Double principle;
         Integer numPayments;
+        Double propertyTaxPercent;
+        Integer years;
         //parse to double for home value (aka principle)
         if (homeValue.getText().equals("") || homeValue == null){
             principle = 0.0;
@@ -84,8 +91,17 @@ public class MortgageActivity extends AppCompatActivity {
         //parse to int for number of payments to be made.
         if(termsDropdown.getSelectedItem().toString().equals("") || termsDropdown == null){
             numPayments = 0;
+            years = 0;
         }else{
-            numPayments = Integer.parseInt(termsDropdown.getSelectedItem().toString()) * 12;
+            years = Integer.parseInt(termsDropdown.getSelectedItem().toString());
+            numPayments = years * 12;
+
+        }
+        //parse to double for property tax percentage
+        if (propertyTaxRate.getText().equals("") || propertyTaxRate == null){
+            propertyTaxPercent = 0.0;
+        }else{
+            propertyTaxPercent = Double.parseDouble(propertyTaxRate.getText().toString()) / 100 ;
         }
 
         monthlyPayment = principle * ( (monthlyInterest * Math.pow(monthlyInterest + 1 , numPayments)) / (Math.pow(monthlyInterest + 1, numPayments)-1));
@@ -96,20 +112,42 @@ public class MortgageActivity extends AppCompatActivity {
         //format the monthly payment to a str and display it
         String monthlyPaymentToStr = monthlyPayment.toString();
         monthlyPaymentAmount.setText(monthlyPaymentToStr);
-        //find the total interest paid and set it to a string. Set the TextView as astr
+        //find the total interest paid and set it to a string. Set the TextView as a str
         String totIntPaidStr = interestPaid(monthlyPayment, numPayments, principle).toString();
         totalInterestPaid.setText(totIntPaidStr);
+        //find the total property tax paid and set to a string then place in the TextView to show result.
+        String totPropTaxPaid = propertyInterestPaid(years, propertyTaxPercent, principle).toString();
+        totalPropertyTaxPaid.setText(totPropTaxPaid);
 
 
     }
 
-    //doing a func to find total interest paid to keep calculate() clean
+    /**
+     * @param monthlyPayment the monthly payment for the mortgage
+     * @param numPayments how many payments will be made over the course of the mortgage
+     * @param principle the principle of the loan (house val - down payment)
+     * @return the total interest paid in dollar amount of the mortgage
+     */
     Double interestPaid(Double monthlyPayment, Integer numPayments, Double principle){
         Double p = principle;
         Double m = monthlyPayment;
         Integer n = numPayments;
         Double interest =  (m*n) - p;
         return interest;
+    }
+
+    /**
+     * @param yearsPaid the number of years paid for the load
+     * @param propTaxPercent the percent in double form for the property tax (int percent / 100)
+     * @param houseValue the house's original value.
+     * @return the total dollar amount of property tax paid over the course of the mortgage.
+     */
+    Double propertyInterestPaid(Integer yearsPaid, Double propTaxPercent, Double houseValue){
+        Integer y = yearsPaid;
+        Double p = propTaxPercent;
+        Double h = houseValue;
+
+        return y * h * p;
     }
 
     /**
@@ -122,7 +160,9 @@ public class MortgageActivity extends AppCompatActivity {
         propertyTaxRate.getText().clear();
         output.setVisibility(View.INVISIBLE);
     }
-    //this is to instantiate the edit texts so that the onCreate isnt so busy looking
+    /**
+     * This instantiates the input fields.
+     */
     private void instantiateEditTexts(){
         homeValue = (EditText) findViewById(R.id.homeValue);
         downPayment = (EditText) findViewById(R.id.downPayment);
