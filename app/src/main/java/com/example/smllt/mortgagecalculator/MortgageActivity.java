@@ -78,7 +78,6 @@ public class MortgageActivity extends AppCompatActivity {
      * It makes the output visible to the user.
      */
     private void calculate() {
-        //TODO:
         Double monthlyInterest = 0.0;
         Double principle = 0.0;
         Integer numPayments = 0;
@@ -87,6 +86,7 @@ public class MortgageActivity extends AppCompatActivity {
         Double dwnPayment;
         //for error checking
         Integer missingFieldCounter = 0;
+
         //parse to double for home value (aka principle)
         if (homeValue.getText().length() == 0){
             homeValue.setError("Home Value is required!");
@@ -120,25 +120,31 @@ public class MortgageActivity extends AppCompatActivity {
         }else{
             propertyTaxPercent = Double.parseDouble(propertyTaxRate.getText().toString()) / 100 ;
         }
-
-        monthlyPayment = principle * ( (monthlyInterest * Math.pow(monthlyInterest + 1 , numPayments)) / (Math.pow(monthlyInterest + 1, numPayments)-1));
-        //I am not sure how to use this formatter.
-        //String.format("%.2f", monthlyPayment);
         if (missingFieldCounter > 0) {
             output.setVisibility(View.INVISIBLE);
             missingFieldCounter = 0;
             return;
         }
+
+        //this is the monthly payment without the property tax
+        monthlyPayment = principle * ( (monthlyInterest * Math.pow(monthlyInterest + 1 , numPayments)) / (Math.pow(monthlyInterest + 1, numPayments)-1));
+        monthlyPayment = monthlyPayment + ( propertyInterestPaid(years, propertyTaxPercent, Double.parseDouble(homeValue.getText().toString())) / numPayments);
+
+        //I am not sure how to use this formatter.
+        //String.format("%.2f", monthlyPayment);
+
         output.setVisibility(View.VISIBLE);
 
         //format the monthly payment to a str and display it
         String monthlyPaymentToStr = monthlyPayment.toString();
         monthlyPaymentAmount.setText(monthlyPaymentToStr);
         //find the total interest paid and set it to a string. Set the TextView as a str
+        //NEED THIS to reset monthly payment to not have property tax
+        monthlyPayment = principle * ( (monthlyInterest * Math.pow(monthlyInterest + 1 , numPayments)) / (Math.pow(monthlyInterest + 1, numPayments)-1));
         String totIntPaidStr = interestPaid(monthlyPayment, numPayments, principle).toString();
         totalInterestPaid.setText(totIntPaidStr);
         //find the total property tax paid and set to a string then place in the TextView to show result.
-        String totPropTaxPaid = propertyInterestPaid(years, propertyTaxPercent, principle).toString();
+        String totPropTaxPaid = propertyInterestPaid(years, propertyTaxPercent, Double.parseDouble(homeValue.getText().toString())).toString();
         totalPropertyTaxPaid.setText(totPropTaxPaid);
         payOffDate.setText(getFutureDate(new Date(), years * 365));
 
