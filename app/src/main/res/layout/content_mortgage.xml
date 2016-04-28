@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/scrollView"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.smllt.mortgagecalculator.MortgageActivity"
     tools:showIn="@layout/activity_mortgage">
@@ -73,35 +74,39 @@
             android:visibility="invisible"
             android:id="@+id/output">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Monthly Payment Amount"/>
+                android:text="Monthly Payment Amount"
+                android:textStyle="bold"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/monthlyPaymentAmount"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Total Interest Paid"/>
+                android:text="Total Interest Paid"
+                android:textStyle="bold"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/totalInterestPaid"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Total Property Tax Paid"/>
+                android:text="Total Property Tax Paid"
+                android:textStyle="bold"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/totalPropertyTaxPaid"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Pay Off Date"/>
+                android:text="Pay Off Date"
+                android:textStyle="bold"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/payOffDate"/>
         </LinearLayout>

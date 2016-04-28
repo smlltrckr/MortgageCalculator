@@ -7,10 +7,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MortgageActivity extends AppCompatActivity {
     private Button calculateBtn, resetBtn;
@@ -19,6 +25,7 @@ public class MortgageActivity extends AppCompatActivity {
     private LinearLayout output;
     private TextView monthlyPaymentAmount,totalInterestPaid,totalPropertyTaxPaid,payOffDate;
     private Double monthlyPayment;
+    private ScrollView sv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +36,14 @@ public class MortgageActivity extends AppCompatActivity {
         output.setVisibility(View.INVISIBLE);
         // Loads up the choices for the terms spinner.
         termsDropdown = (Spinner)findViewById(R.id.terms);
-        String[] termsArray = new String[]{"", "15", "20", "25", "30", "40"};
+        String[] termsArray = new String[]{"15", "20", "25", "30", "40"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, termsArray);
         termsDropdown.setAdapter(adapter);
         //loads buttons
         calculateBtn = (Button) findViewById(R.id.calculate);
         resetBtn = (Button) findViewById(R.id.reset);
         //loads edit texts
+        sv = (ScrollView) findViewById(R.id.scrollView);
         instantiateEditTexts();
         instantiateHiddenTexts();
 
@@ -71,35 +79,44 @@ public class MortgageActivity extends AppCompatActivity {
      */
     private void calculate() {
         //TODO:
-        Double monthlyInterest;
-        Double principle;
-        Integer numPayments;
-        Double propertyTaxPercent;
-        Integer years;
+        Double monthlyInterest = 0.0;
+        Double principle = 0.0;
+        Integer numPayments = 0;
+        Double propertyTaxPercent = 0.0;
+        Integer years = 0;
+        Double dwnPayment;
+        //for error checking
+        Integer missingFieldCounter = 0;
         //parse to double for home value (aka principle)
-        if (homeValue.getText().equals("") || homeValue == null){
-            principle = 0.0;
+        if (homeValue.getText().length() == 0){
+            homeValue.setError("Home Value is required!");
+            missingFieldCounter++;
         }else{
-            principle = ( Double.parseDouble( homeValue.getText().toString() ) - Double.parseDouble( downPayment.getText().toString() ) );
+            if(downPayment.getText().length() == 0){
+                dwnPayment = 0.0;
+            } else {
+                dwnPayment = Double.parseDouble( downPayment.getText().toString());
+            }
+            principle = ( Double.parseDouble( homeValue.getText().toString() ) - dwnPayment );
         }
         //parse to double for interest rate and divide by 12 to get monthly interest
-        if (interestRate.getText().equals("") || interestRate == null){
-            monthlyInterest = 0.0;
+        if (interestRate.getText().length() == 0){
+            interestRate.setError("Interest Rate is Required!");
+            missingFieldCounter++;
         }else{
             monthlyInterest = Double.parseDouble(interestRate.getText().toString()) / 100 / 12;
         }
         //parse to int for number of payments to be made.
-        if(termsDropdown.getSelectedItem().toString().equals("") || termsDropdown == null){
-            numPayments = 0;
-            years = 0;
+        if(termsDropdown.getSelectedItem().toString().length() == 0){
+            missingFieldCounter++;
         }else{
             years = Integer.parseInt(termsDropdown.getSelectedItem().toString());
             numPayments = years * 12;
-
         }
         //parse to double for property tax percentage
-        if (propertyTaxRate.getText().equals("") || propertyTaxRate == null){
-            propertyTaxPercent = 0.0;
+        if (propertyTaxRate.getText().length() == 0){
+            propertyTaxRate.setError("Property Tax Rate is required!");
+            missingFieldCounter++;
         }else{
             propertyTaxPercent = Double.parseDouble(propertyTaxRate.getText().toString()) / 100 ;
         }
@@ -107,6 +124,11 @@ public class MortgageActivity extends AppCompatActivity {
         monthlyPayment = principle * ( (monthlyInterest * Math.pow(monthlyInterest + 1 , numPayments)) / (Math.pow(monthlyInterest + 1, numPayments)-1));
         //I am not sure how to use this formatter.
         //String.format("%.2f", monthlyPayment);
+        if (missingFieldCounter > 0) {
+            output.setVisibility(View.INVISIBLE);
+            missingFieldCounter = 0;
+            return;
+        }
         output.setVisibility(View.VISIBLE);
 
         //format the monthly payment to a str and display it
@@ -118,7 +140,7 @@ public class MortgageActivity extends AppCompatActivity {
         //find the total property tax paid and set to a string then place in the TextView to show result.
         String totPropTaxPaid = propertyInterestPaid(years, propertyTaxPercent, principle).toString();
         totalPropertyTaxPaid.setText(totPropTaxPaid);
-
+        payOffDate.setText(getFutureDate(new Date(), years * 365));
 
     }
 
@@ -158,6 +180,8 @@ public class MortgageActivity extends AppCompatActivity {
         downPayment.getText().clear();
         interestRate.getText().clear();
         propertyTaxRate.getText().clear();
+        termsDropdown.setSelection(0);
+        sv.fullScroll(ScrollView.FOCUS_UP);
         output.setVisibility(View.INVISIBLE);
     }
     /**
@@ -168,5 +192,15 @@ public class MortgageActivity extends AppCompatActivity {
         downPayment = (EditText) findViewById(R.id.downPayment);
         interestRate = (EditText) findViewById(R.id.interestRate);
         propertyTaxRate = (EditText) findViewById(R.id.propertyTaxRate);
+    }
+
+    public String getFutureDate(Date currentDate, int days) {
+        DateFormat df = new SimpleDateFormat("MMMM/yyyy");
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currentDate);
+        cal.add(Calendar.DATE, days);
+
+        Date futureDate = cal.getTime();
+        return df.format(futureDate);
     }
 }
