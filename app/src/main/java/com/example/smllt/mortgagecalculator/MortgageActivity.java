@@ -21,7 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-//TODO fix when down payment is larger than house value. rounding
 public class MortgageActivity extends AppCompatActivity {
     private Button calculateBtn, resetBtn;
     private EditText homeValue,downPayment,interestRate,propertyTaxRate;
@@ -55,12 +54,14 @@ public class MortgageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try  {
+                    //closes keyboard when calculate is pressed
                     InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
                 } catch (Exception e) {
 
                 }
+                //do calculations and show results
                 calculate();
             }
 
@@ -70,12 +71,14 @@ public class MortgageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try  {
+                    //close keyboard when reset is pressed
                     InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
                 } catch (Exception e) {
 
                 }
+                //clear all fields and hide results
                 reset();
             }
         });
@@ -108,21 +111,29 @@ public class MortgageActivity extends AppCompatActivity {
 
         //parse to double for home value (aka principle)
         if (homeValue.getText().length() == 0){
+            //no home value
             homeValue.setError("Home Value is required!");
             missingFieldCounter++;
+        }else if( Double.parseDouble(downPayment.getText().toString()) > Double.parseDouble(homeValue.getText().toString())){
+            //home value is less than the down payment
+            downPayment.setError("Down payment must be smaller than house value");
         }else{
-            if(downPayment.getText().length() == 0){
-                dwnPayment = 0.0;
-            } else {
-                dwnPayment = Double.parseDouble( downPayment.getText().toString());
+                //set 0's or actual values for down payment
+                if(downPayment.getText().length() == 0){
+                    dwnPayment = 0.0;
+                } else {
+                    dwnPayment = Double.parseDouble( downPayment.getText().toString());
+                }
+            //calculate principle
+                principle = ( Double.parseDouble( homeValue.getText().toString() ) - dwnPayment );
             }
-            principle = ( Double.parseDouble( homeValue.getText().toString() ) - dwnPayment );
-        }
-        //parse to double for interest rate and divide by 12 to get monthly interest
+
+       //interest rate error checking
         if (interestRate.getText().length() == 0){
             interestRate.setError("Interest Rate is Required!");
             missingFieldCounter++;
         }else{
+            //parse to double for interest rate and divide by 12 to get monthly interest
             monthlyInterest = Double.parseDouble(interestRate.getText().toString()) / 100 / 12;
         }
         //parse to int for number of payments to be made.
@@ -132,11 +143,10 @@ public class MortgageActivity extends AppCompatActivity {
             years = Integer.parseInt(termsDropdown.getSelectedItem().toString());
             numPayments = years * 12;
         }
-        //parse to double for property tax percentage
+        //if the property tax rate isn;t entered, make it 0. It is NOT required
         if (propertyTaxRate.getText().length() == 0){
-            propertyTaxRate.setError("Property Tax Rate is required!");
-            missingFieldCounter++;
-        }else{
+           propertyTaxPercent = 0.0;
+        }else{//parse to double for property tax percentage
             propertyTaxPercent = Double.parseDouble(propertyTaxRate.getText().toString()) / 100 ;
         }
         if (missingFieldCounter > 0) {
@@ -149,22 +159,22 @@ public class MortgageActivity extends AppCompatActivity {
         monthlyPayment = principle * ( (monthlyInterest * Math.pow(monthlyInterest + 1 , numPayments)) / (Math.pow(monthlyInterest + 1, numPayments)-1));
         monthlyPayment = monthlyPayment + ( propertyInterestPaid(years, propertyTaxPercent, Double.parseDouble(homeValue.getText().toString())) / numPayments);
 
-        //I am not sure how to use this formatter.
-        //String.format("%.2f", monthlyPayment);
 
+        //START DISPLAYING OUTPUT
         output.setVisibility(View.VISIBLE);
 
-        //format the monthly payment to a str and display it
+        //format the monthly payment to a String and display it
         String monthlyPaymentToStr = format(monthlyPayment).toString();
         monthlyPaymentAmount.setText("$"+monthlyPaymentToStr);
         //find the total interest paid and set it to a string. Set the TextView as a str
-        //NEED THIS to reset monthly payment to not have property tax
+        //NEED THIS NEXT LINE to reset monthly payment to not have property tax
         monthlyPayment = principle * ( (monthlyInterest * Math.pow(monthlyInterest + 1 , numPayments)) / (Math.pow(monthlyInterest + 1, numPayments)-1));
         String totIntPaidStr = format(interestPaid(monthlyPayment, numPayments, principle)).toString();
         totalInterestPaid.setText("$"+totIntPaidStr);
         //find the total property tax paid and set to a string then place in the TextView to show result.
         String totPropTaxPaid = format(propertyInterestPaid(years, propertyTaxPercent, Double.parseDouble(homeValue.getText().toString()))).toString();
         totalPropertyTaxPaid.setText("$"+totPropTaxPaid);
+        //sets the payoff date
         payOffDate.setText(getFutureDate(new Date(), numPayments));
 
     }
@@ -219,6 +229,12 @@ public class MortgageActivity extends AppCompatActivity {
         propertyTaxRate = (EditText) findViewById(R.id.propertyTaxRate);
     }
 
+    /**
+     *This will get a future date however many months ahead of the number of payment (12 * years) value
+     * @param currentDate the date currently
+     * @param months the number of months for the term of the loan (please pull in numPayment)
+     * @return return the String of the date that the payments will be finished
+     */
     public String getFutureDate(Date currentDate, int months) {
         DateFormat df = new SimpleDateFormat("MMMM/yyyy");
         Calendar cal = Calendar.getInstance();
@@ -229,7 +245,12 @@ public class MortgageActivity extends AppCompatActivity {
         Date futureDate = cal.getTime();
         return df.format(futureDate);
     }
-	
+
+    /**
+     * This will format decimals to X.XX and round them too.
+     * @param numToFormat a double that needs formatting
+     * @return a double that is formatted into X.XX
+     */
 	public Double format(Double numToFormat){
 		Double d = numToFormat;
 		DecimalFormat df = new DecimalFormat("#.##");
