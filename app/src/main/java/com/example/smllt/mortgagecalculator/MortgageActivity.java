@@ -1,8 +1,10 @@
 package com.example.smllt.mortgagecalculator;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,10 +16,12 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+//TODO fix when down payment is larger than house value. rounding
 public class MortgageActivity extends AppCompatActivity {
     private Button calculateBtn, resetBtn;
     private EditText homeValue,downPayment,interestRate,propertyTaxRate;
@@ -50,13 +54,28 @@ public class MortgageActivity extends AppCompatActivity {
         calculateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try  {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+                } catch (Exception e) {
+
+                }
                 calculate();
             }
+
         });
 
         resetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try  {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+                } catch (Exception e) {
+
+                }
                 reset();
             }
         });
@@ -136,17 +155,17 @@ public class MortgageActivity extends AppCompatActivity {
         output.setVisibility(View.VISIBLE);
 
         //format the monthly payment to a str and display it
-        String monthlyPaymentToStr = monthlyPayment.toString();
-        monthlyPaymentAmount.setText(monthlyPaymentToStr);
+        String monthlyPaymentToStr = format(monthlyPayment).toString();
+        monthlyPaymentAmount.setText("$"+monthlyPaymentToStr);
         //find the total interest paid and set it to a string. Set the TextView as a str
         //NEED THIS to reset monthly payment to not have property tax
         monthlyPayment = principle * ( (monthlyInterest * Math.pow(monthlyInterest + 1 , numPayments)) / (Math.pow(monthlyInterest + 1, numPayments)-1));
-        String totIntPaidStr = interestPaid(monthlyPayment, numPayments, principle).toString();
-        totalInterestPaid.setText(totIntPaidStr);
+        String totIntPaidStr = format(interestPaid(monthlyPayment, numPayments, principle)).toString();
+        totalInterestPaid.setText("$"+totIntPaidStr);
         //find the total property tax paid and set to a string then place in the TextView to show result.
-        String totPropTaxPaid = propertyInterestPaid(years, propertyTaxPercent, Double.parseDouble(homeValue.getText().toString())).toString();
-        totalPropertyTaxPaid.setText(totPropTaxPaid);
-        payOffDate.setText(getFutureDate(new Date(), years * 365));
+        String totPropTaxPaid = format(propertyInterestPaid(years, propertyTaxPercent, Double.parseDouble(homeValue.getText().toString()))).toString();
+        totalPropertyTaxPaid.setText("$"+totPropTaxPaid);
+        payOffDate.setText(getFutureDate(new Date(), numPayments));
 
     }
 
@@ -200,13 +219,22 @@ public class MortgageActivity extends AppCompatActivity {
         propertyTaxRate = (EditText) findViewById(R.id.propertyTaxRate);
     }
 
-    public String getFutureDate(Date currentDate, int days) {
+    public String getFutureDate(Date currentDate, int months) {
         DateFormat df = new SimpleDateFormat("MMMM/yyyy");
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentDate);
-        cal.add(Calendar.DATE, days);
+
+        cal.add(Calendar.MONTH, months-1);
 
         Date futureDate = cal.getTime();
         return df.format(futureDate);
     }
+	
+	public Double format(Double numToFormat){
+		Double d = numToFormat;
+		DecimalFormat df = new DecimalFormat("#.##");
+		d = Double.valueOf(df.format(d));
+
+		return d;
+	}
 }

@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">MortgageCalculator</string>
+    <string name="home_value">Home&#160;Value</string>
+    <string name="down_payment">Down&#160;Payment</string>
+    <string name="annual_interest_rate">Annual&#160;Interest&#160;Rate&#160;(%)</string>
+    <string name="term_years">Term&#160;(years)</string>
+    <string name="property_tax_rate">Property&#160;Tax Rate&#160;(%)</string>
+    <string name="monthly_payment_amount">Monthly&#160;Payment&#160;Amount</string>
+    <string name="total_interest_paid">Total&#160;Interest&#160;Paid</string>
+    <string name="total_property_tax_paid">Total&#160;Property&#160;Tax&#160;Paid</string>
+    <string name="pay_off_date">Pay&#160;Off&#160;Date</string>
+    <string name="calculate">Calculate</string>
+    <string name="reset">Reset</string>
 </resources>

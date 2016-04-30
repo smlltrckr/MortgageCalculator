@@ -16,51 +16,52 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Home Value"/>
+            android:text="@string/home_value"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
+            android:hint="@string/home_value"
             android:id="@+id/homeValue"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Down Payment"/>
+            android:text="@string/down_payment"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
+            android:hint="@string/down_payment"
             android:id="@+id/downPayment"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Annual Interest Rate (%)"/>
+            android:text="@string/annual_interest_rate"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
+            android:hint="@string/annual_interest_rate"
             android:id="@+id/interestRate"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Terms (year)"/>
+            android:text="@string/term_years"/>
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dropdown"
             android:id="@+id/terms"/>
-        <!--Not quite sure how Property Tax Rate is used.
-            Also not sure if looking for % or Cash Value.
-            Change if needed-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Property Tax Rate (%)"/>
+            android:text="@string/property_tax_rate"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
+            android:hint="@string/property_tax_rate"
             android:id="@+id/propertyTaxRate"/>
         <TextView
             android:layout_width="match_parent"
@@ -76,38 +77,46 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Monthly Payment Amount"
+                android:text="@string/monthly_payment_amount"
+                android:textSize="20sp"
                 android:textStyle="bold"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:id="@+id/monthlyPaymentAmount"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Total Interest Paid"
+                android:text="@string/total_interest_paid"
+                android:textSize="20sp"
                 android:textStyle="bold"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:id="@+id/totalInterestPaid"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Total Property Tax Paid"
+                android:text="@string/total_property_tax_paid"
+                android:textSize="20sp"
                 android:textStyle="bold"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:id="@+id/totalPropertyTaxPaid"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Pay Off Date"
+                android:textSize="20sp"
+                android:text="@string/pay_off_date"
                 android:textStyle="bold"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:id="@+id/payOffDate"/>
         </LinearLayout>
 

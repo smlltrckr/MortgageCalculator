@@ -15,17 +15,37 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="2.00">
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"
                 android:id="@+id/calculate"
                 android:layout_weight="1.00"
-                android:text="Calculate"/>
+                android:textSize="20sp"
+                android:background="@color/buttonGreen"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:text="@string/calculate"/>
             <Button
+
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:layout_weight="1.00"
-                android:text="Reset"
+                android:text="@string/reset"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:background="@color/buttonGreen"
+                android:textStyle="bold"
                 android:id="@+id/reset"/>
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>
